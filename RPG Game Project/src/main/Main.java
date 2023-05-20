@@ -18,11 +18,11 @@ public class Main {
 		
 		// Causes window to be sized to fit the preferred size and layout of its subcomponents (GamePanel)
 		window.pack();
+		gamePanel.startGameThread();
 		
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
 				
-		
 	}
 
 }
