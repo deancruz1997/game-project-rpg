@@ -7,13 +7,15 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+import entity.Player;
+
 public class GamePanel extends JPanel implements Runnable {
 
 	// Screen Settings
-	final int originalTileSize = 32; // 32 x 32 tile size
+	final int originalTileSize = 16; // 16 x 16 tile size
 	final int scale = 3;
 	
-	final int tileSize = originalTileSize * scale; // 96 x 96 tile size
+	public final int tileSize = originalTileSize * scale; // 48 x 48 tile size
 	
 	// Maximum tiles on screen = 16 x 9 tiles (16:9 ratio)
 	final int maxScreenCol = 16;
@@ -26,20 +28,33 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	KeyHandler keyH = new KeyHandler();
 	Thread gameThread;
-	
-	// Set player's default position
-	int playerX = 100;
-	int playerY = 100;
-	int playerSpeed = 4;
-	
+	Player player = new Player(this, keyH);
 	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-		this.setBackground(Color.black);
+		this.setBackground(Color.white);
 		this.setDoubleBuffered(true); // Enabling this to true can improve game's rendering performance
+	
+		getImage();
+		loadAnimations();
+		
 		this.addKeyListener(keyH);
 		this.setFocusable(true); // Game panel can be "focusable" to receive key input
 		
+	}
+	
+	public void updateAnimationTick() {
+		player.updateAnimationTick();
+	}
+	
+	public void getImage() {
+		player.getPlayerImage();
+
+	}
+	
+	public void loadAnimations() {
+		player.loadAnimations();
+
 	}
 	
 	public void startGameThread() {
@@ -91,18 +106,7 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	// Update in game loop
 	public void update() {
-		if (keyH.upPressed)
-			playerY -= playerSpeed;
-		
-		else if (keyH.downPressed)
-			playerY += playerSpeed;
-		
-		else if (keyH.leftPressed)
-			playerX -= playerSpeed;
-		
-		else if (keyH.rightPressed)
-			playerX += playerSpeed;
-			
+		player.update();
 	}
 	
 	// Draw in game loop
@@ -112,9 +116,8 @@ public class GamePanel extends JPanel implements Runnable {
 		
 		// Change Graphics g to Graphics2D class for more functionality
 		Graphics2D g2 = (Graphics2D)g;
-		
-		g2.setColor(Color.white);
-		g2.fillRect(playerX, playerY, tileSize, tileSize);
+		updateAnimationTick();
+		player.draw(g2);
 		
 		// Dispose of this graphics context and release any system resources that it is using
 		g2.dispose();
