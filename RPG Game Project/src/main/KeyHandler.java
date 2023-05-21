@@ -29,8 +29,7 @@ public class KeyHandler implements KeyListener {
 		
 		if (code == KeyEvent.VK_D) 
 			rightPressed = true;
-		
-		
+				
 	}
 
 	@Override
@@ -51,6 +50,14 @@ public class KeyHandler implements KeyListener {
 		if (code == KeyEvent.VK_D) 
 			rightPressed = false;
 		
+		
+	}
+	
+	public void resetDirBooleans() {
+		upPressed = false;
+		downPressed = false;
+		leftPressed = false;
+		rightPressed = false;
 		
 	}
 
